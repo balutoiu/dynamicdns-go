@@ -16,6 +16,8 @@ docker build -t dynamicdns-go .
 docker run -d -e USERNAME=<username> -e PASSWORD=<password> -e DOMAIN=<domain> dynamicdns-go
 ```
 
+Prebuilt docker images are available [here](https://hub.docker.com/r/alinbalutoiu/dynamicdns-go).
+
 ## Supported Dynamic DNS providers
 
 Currently only Google Domains is supported.
