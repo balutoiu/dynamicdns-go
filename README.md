@@ -26,7 +26,7 @@ docker run -d -v `pwd`/config.yaml:/config.yaml -e DNS_PROVIDER=googledomains al
 
 Prebuilt docker images are available [here](https://hub.docker.com/r/alinbalutoiu/dynamicdns-go).
 
-## Additional environment variables
+## Environment variables
 
 - `DNS_PROVIDER` - the DNS provider to be used (defaults to `googledomains`)
 
@@ -37,7 +37,7 @@ example: `1s`, `1m`, `1h` etc. (defaults to `1h0m0s`)
 
 ### Google domains
 
-Example of config file:
+Example of `config.yaml` file:
 ```
 googledomains:
   username: user
@@ -55,7 +55,7 @@ docker run -d --restart=unless-stopped \
 
 ### Mail-in-a-box
 
-Example of config file:
+Example of `config.yaml` file:
 ```
 mailinabox:
   username: user
