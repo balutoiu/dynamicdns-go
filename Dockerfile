@@ -7,5 +7,6 @@ RUN CGO_ENABLED=0 go build -o /go/bin/dynamicdns-go
 
 FROM alpine:latest
 COPY --from=build /go/bin/dynamicdns-go /
+ADD config.yaml /config.yaml
 
 CMD ["/dynamicdns-go"]

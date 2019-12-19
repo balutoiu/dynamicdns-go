@@ -8,16 +8,66 @@ A simple Dynamic DNS client written in Go.
 
 2. Build the docker container:
 ```
-docker build -t dynamicdns-go .
+docker build -t alinbalutoiu/dynamicdns-go .
 ```
 
-3. Run the container:
+3. Create the config file ([sample here](/config.yaml)):
 ```
-docker run -d -e USERNAME=<username> -e PASSWORD=<password> -e DOMAIN=<domain> dynamicdns-go
+googledomains:
+  username: user
+  password: pass
+  domain: test.example.com
+```
+
+4. Run the container:
+```
+docker run -d -v `pwd`/config.yaml:/config.yaml -e DNS_PROVIDER=googledomains alinbalutoiu/dynamicdns-go
 ```
 
 Prebuilt docker images are available [here](https://hub.docker.com/r/alinbalutoiu/dynamicdns-go).
 
+## Additional environment variables
+
+- `DNS_PROVIDER` - the DNS provider to be used (defaults to `googledomains`)
+
+- `SLEEP_INTERVAL` - the amount of time to wait between updates,
+example: `1s`, `1m`, `1h` etc. (defaults to `1h0m0s`)
+
 ## Supported Dynamic DNS providers
 
-Currently only Google Domains is supported.
+### Google domains
+
+Example of config file:
+```
+googledomains:
+  username: user
+  password: pass
+  domain: test.example.com
+```
+
+Start the container with:
+```
+docker run -d --restart=unless-stopped \
+    -v `pwd`/config.yaml:/config.yaml \
+    -e DNS_PROVIDER=googledomains \
+    alinbalutoiu/dynamicdns-go
+```
+
+### Mail-in-a-box
+
+Example of config file:
+```
+mailinabox:
+  username: user
+  password: pass
+  domain: www.example.com
+  api_url: https://box.mailinabox.com
+```
+
+Start the container with:
+```
+docker run -d --restart=unless-stopped \
+    -v `pwd`/config.yaml:/config.yaml \
+    -e DNS_PROVIDER=mailinabox \
+    alinbalutoiu/dynamicdns-go
+```

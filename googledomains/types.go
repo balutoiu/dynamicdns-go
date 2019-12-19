@@ -12,3 +12,9 @@ var ErrorMap map[string]error = map[string]error{
 		"failure to interpret previous responses correctly."),
 	"911": fmt.Errorf("An error happened on our end. Wait 5 minutes and retry."),
 }
+
+type Config struct {
+	Username string `yaml:"username"`
+	Password string `yaml:"password"`
+	Domain   string `yaml:"domain"`
+}

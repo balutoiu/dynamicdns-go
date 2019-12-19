@@ -1,0 +1,10 @@
+googledomains:
+  username: user
+  password: pass
+  domain: www.example.com
+
+mailinabox:
+  username: user
+  password: pass
+  domain: www.example.com
+  api_url: https://box.mailinabox.com
