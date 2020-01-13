@@ -1,5 +1,7 @@
 # Dynamic DNS Go
 
+[![Build Status](https://cloud.drone.io/api/badges/alinbalutoiu/dynamicdns-go/status.svg)](https://cloud.drone.io/alinbalutoiu/dynamicdns-go)
+
 A simple Dynamic DNS client written in Go.
 
 ## How to use
