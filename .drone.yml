@@ -1,0 +1,63 @@
+---
+kind: pipeline
+type: docker
+name: linux-amd64
+
+platform:
+  arch: amd64
+  os: linux
+
+steps:
+- name: build
+  image: golang:1.13-alpine
+  commands:
+  - sh scripts/build.sh
+  environment:
+    GOARCH: amd64
+    GOOS: linux
+
+- name: publish
+  image: plugins/docker
+  settings:
+    dockerfile: Dockerfile.amd64
+    repo: alinbalutoiu/dynamicdns-go
+    tags:
+      - latest
+      - amd64
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+
+
+---
+kind: pipeline
+type: docker
+name: linux-arm64
+
+platform:
+  arch: arm64
+  os: linux
+
+steps:
+- name: build
+  image: golang:1.13-alpine
+  commands:
+  - sh scripts/build.sh
+  environment:
+    GOARCH: arm64
+    GOOS: linux
+
+- name: publish
+  image: plugins/docker
+  settings:
+    dockerfile: Dockerfile.arm64
+    repo: alinbalutoiu/dynamicdns-go
+    tags: arm64
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+
+depends_on:
+- linux-amd64

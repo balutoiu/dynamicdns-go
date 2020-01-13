@@ -9,8 +9,5 @@ all build:
 run:
 	@./${OUT_DIR}/dynamicdns-go
 
-docker:
-	docker build -t alinbalutoiu/dynamicdns-go .
-
 clean:
 	rm -rf ${OUT_DIR}
