@@ -135,7 +135,7 @@ func runApp(c *cli.Context) error {
 		if err != nil {
 			return err
 		}
-		log.Infof("Sleeping for %v", sleepInterval)
+		log.Debugf("Sleeping for %v", sleepInterval)
 		time.Sleep(sleepInterval)
 	}
 	return nil

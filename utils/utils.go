@@ -72,7 +72,7 @@ func IPChanged(hostname string) (string, error) {
 			log.Infof("DNS is propagated")
 			SetWaitDNSPropagation(false)
 		}
-		log.Infof("The IP did not change: %v", publicIP.IP)
+		log.Debugf("The IP did not change: %v", publicIP.IP)
 		return "", nil
 	} else {
 		if previousIP != publicIP.IP {
