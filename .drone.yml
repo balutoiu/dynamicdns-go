@@ -29,7 +29,6 @@ steps:
     password:
       from_secret: docker_password
 
-
 ---
 kind: pipeline
 type: docker
@@ -54,6 +53,38 @@ steps:
     dockerfile: Dockerfile.arm64
     repo: alinbalutoiu/dynamicdns-go
     tags: arm64
+    username:
+      from_secret: docker_username
+    password:
+      from_secret: docker_password
+
+depends_on:
+- linux-amd64
+
+---
+kind: pipeline
+type: docker
+name: linux-arm
+
+platform:
+  arch: arm
+  os: linux
+
+steps:
+- name: build
+  image: golang:1.13-alpine
+  commands:
+  - sh scripts/build.sh
+  environment:
+    GOARCH: arm
+    GOOS: linux
+
+- name: publish
+  image: plugins/docker
+  settings:
+    dockerfile: Dockerfile.arm
+    repo: alinbalutoiu/dynamicdns-go
+    tags: arm
     username:
       from_secret: docker_username
     password:
