@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net"
 	"net/http"
+	"strings"
 
 	log "github.com/sirupsen/logrus"
 )
@@ -31,7 +32,12 @@ func GetCurrentPublicIP(target interface{}) error {
 }
 
 func GetDNSIp(domainName string) (*PublicIP, error) {
-	ips, err := net.LookupIP(domainName)
+	// LookupIP doesn't work for wildcard domains
+	dname := domainName
+	if strings.HasPrefix(dname, "*") {
+		dname = fmt.Sprintf("dynamic-dns%v", dname[1:])
+	}
+	ips, err := net.LookupIP(dname)
 	if err != nil {
 		return nil, err
 	}
