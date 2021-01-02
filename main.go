@@ -10,6 +10,7 @@ import (
 
 	"github.com/alinbalutoiu/dynamicdns-go/googledomains"
 	"github.com/alinbalutoiu/dynamicdns-go/mailinabox"
+	"github.com/alinbalutoiu/dynamicdns-go/ovhdomains"
 
 	log "github.com/sirupsen/logrus"
 	"github.com/urfave/cli/v2"
@@ -18,6 +19,7 @@ import (
 const (
 	GOOGLE_DOMAINS = "googledomains"
 	MAIL_IN_A_BOX  = "mailinabox"
+	OVH_DOMAINS    = "ovhdomains"
 )
 
 type DNSClient interface {
@@ -27,7 +29,7 @@ type DNSClient interface {
 var (
 	port                  int
 	logLevel              string
-	supportedDnsProviders = []string{GOOGLE_DOMAINS, MAIL_IN_A_BOX}
+	supportedDnsProviders = []string{GOOGLE_DOMAINS, MAIL_IN_A_BOX, OVH_DOMAINS}
 	dnsProvider           string
 	configFilePath        string
 	sleepInterval         time.Duration
@@ -126,6 +128,8 @@ func runApp(c *cli.Context) error {
 		client = googledomains.NewClient(config.(googledomains.Config))
 	case MAIL_IN_A_BOX:
 		client = mailinabox.NewClient(config.(mailinabox.Config))
+	case OVH_DOMAINS:
+		client = ovhdomains.NewClient(config.(ovhdomains.Config))
 	}
 	log.Infof("Client initialized")
 

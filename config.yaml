@@ -8,3 +8,10 @@ mailinabox:
   password: pass
   domain: www.example.com
   api_url: https://box.mailinabox.com
+
+ovhdomains:
+  application_key: app-key
+  application_secret: app-secret
+  consumer_key: consumer-key
+  zone_name: example
+  sub_domain: www

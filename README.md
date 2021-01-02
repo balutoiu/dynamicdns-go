@@ -73,3 +73,23 @@ docker run -d --restart=unless-stopped \
     -e DNS_PROVIDER=mailinabox \
     alinbalutoiu/dynamicdns-go
 ```
+
+### OVH domains
+
+Example of `config.yaml` file:
+```
+ovhdomains:
+  application_key: app-key
+  application_secret: app-secret
+  consumer_key: consumer-key
+  zone_name: example
+  sub_domain: www
+```
+
+Start the container with:
+```
+docker run -d --restart=unless-stopped \
+    -v `pwd`/config.yaml:/config.yaml \
+    -e DNS_PROVIDER=ovhdomains \
+    alinbalutoiu/dynamicdns-go
+```
