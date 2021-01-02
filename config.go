@@ -6,6 +6,7 @@ import (
 
 	"github.com/alinbalutoiu/dynamicdns-go/googledomains"
 	"github.com/alinbalutoiu/dynamicdns-go/mailinabox"
+	"github.com/alinbalutoiu/dynamicdns-go/ovhdomains"
 
 	"gopkg.in/yaml.v2"
 )
@@ -13,6 +14,7 @@ import (
 type Config struct {
 	GoogleDomains googledomains.Config `yaml:"googledomains,omitempty"`
 	MailInABox    mailinabox.Config    `yaml:"mailinabox,omitempty"`
+	OvhDomains    ovhdomains.Config    `yaml:"ovhdomains,omitempty"`
 }
 
 func getConfig(filePath, dnsProvider string) (interface{}, error) {
@@ -41,6 +43,8 @@ func getConfig(filePath, dnsProvider string) (interface{}, error) {
 		return cfg.GoogleDomains, nil
 	case MAIL_IN_A_BOX:
 		return cfg.MailInABox, nil
+	case OVH_DOMAINS:
+		return cfg.OvhDomains, nil
 	default:
 		return nil, fmt.Errorf("DNS Provider not supported")
 	}
@@ -70,6 +74,22 @@ func validateConfig(cfg *Config, dnsProvider string) error {
 		}
 		if cfg.MailInABox.APIUrl == "" {
 			return fmt.Errorf("Missing api_url from configuration")
+		}
+	case OVH_DOMAINS:
+		if cfg.OvhDomains.ApplicationKey == "" {
+			return fmt.Errorf("Missing application_key from configuration")
+		}
+		if cfg.OvhDomains.ApplicationSecret == "" {
+			return fmt.Errorf("Missing application_secret from configuration")
+		}
+		if cfg.OvhDomains.ConsumerKey == "" {
+			return fmt.Errorf("Missing consumer_key from configuration")
+		}
+		if cfg.OvhDomains.ZoneName == "" {
+			return fmt.Errorf("Missing zone_name from configuration")
+		}
+		if cfg.OvhDomains.SubDomain == "" {
+			return fmt.Errorf("Missing sub_domain from configuration")
 		}
 	default:
 		return fmt.Errorf("DNS Provider not supported")
