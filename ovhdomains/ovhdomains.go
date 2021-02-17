@@ -56,6 +56,14 @@ func (ovhdc *OvhDomainsClient) UpdateIP() error {
 		return err
 	}
 
+	err = ovhdc.client.Post(
+		fmt.Sprintf("/domain/zone/%s/refresh", ovhdc.config.ZoneName),
+		nil,
+		nil)
+	if err != nil {
+		return err
+	}
+
 	// Set to wait for DNS propagation
 	utils.SetWaitDNSPropagation(true)
 
