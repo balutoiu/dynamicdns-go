@@ -1,117 +1,62 @@
 ---
 kind: pipeline
 type: docker
-name: linux-amd64
-
-platform:
-  arch: amd64
-  os: linux
+name: linux-build
 
 steps:
-- name: build
-  image: golang:1.15-alpine
-  commands:
-  - sh scripts/build.sh
-  environment:
-    GOARCH: amd64
-    GOOS: linux
+  - name: build_amd64
+    image: golang:1.15-alpine
+    commands:
+      - sh scripts/build.sh
+    environment:
+      GOARCH: amd64
+      GOOS: linux
 
-- name: publish
-  image: plugins/docker
-  settings:
-    dockerfile: Dockerfile.amd64
-    repo: alinbalutoiu/dynamicdns-go
-    tags: linux-amd64-${DRONE_BRANCH}
-    username:
-      from_secret: docker_username
-    password:
-      from_secret: docker_password
+  - name: build_arm64
+    image: golang:1.15-alpine
+    commands:
+      - sh scripts/build.sh
+    environment:
+      GOARCH: arm64
+      GOOS: linux
 
----
-kind: pipeline
-type: docker
-name: linux-arm64
+  - name: build_arm
+    image: golang:1.15-alpine
+    commands:
+      - sh scripts/build.sh
+    environment:
+      GOARCH: arm
+      GOOS: linux
 
-platform:
-  arch: arm64
-  os: linux
+  - name: publish_amd64
+    image: plugins/docker
+    settings:
+      dockerfile: Dockerfile.amd64
+      repo: alinbalutoiu/dynamicdns-go
+      tags: linux-amd64-${DRONE_BRANCH}
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
 
-steps:
-- name: build
-  image: golang:1.15-alpine
-  commands:
-  - sh scripts/build.sh
-  environment:
-    GOARCH: arm64
-    GOOS: linux
+  - name: publish_arm64
+    image: plugins/docker
+    settings:
+      dockerfile: Dockerfile.arm64
+      repo: alinbalutoiu/dynamicdns-go
+      tags: linux-arm64-${DRONE_BRANCH}
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
 
-- name: publish
-  image: plugins/docker
-  settings:
-    dockerfile: Dockerfile.arm64
-    repo: alinbalutoiu/dynamicdns-go
-    tags: linux-arm64-${DRONE_BRANCH}
-    username:
-      from_secret: docker_username
-    password:
-      from_secret: docker_password
-
-depends_on:
-- linux-amd64
-
----
-kind: pipeline
-type: docker
-name: linux-arm
-
-platform:
-  arch: arm
-  os: linux
-
-steps:
-- name: build
-  image: golang:1.15-alpine
-  commands:
-  - sh scripts/build.sh
-  environment:
-    GOARCH: arm
-    GOOS: linux
-
-- name: publish
-  image: plugins/docker
-  settings:
-    dockerfile: Dockerfile.arm
-    repo: alinbalutoiu/dynamicdns-go
-    tags: linux-arm-${DRONE_BRANCH}
-    username:
-      from_secret: docker_username
-    password:
-      from_secret: docker_password
-
-depends_on:
-- linux-amd64
-
----
-kind: pipeline
-type: docker
-name: manifest
-
-steps:
-- name: publish
-  image: plugins/manifest
-  settings:
-    username:
-      from_secret: docker_username
-    password:
-      from_secret: docker_password
-    target: alinbalutoiu/dynamicdns-go:latest
-    template: alinbalutoiu/dynamicdns-go:OS-ARCH-${DRONE_BRANCH}
-    platforms:
-      - linux/amd64
-      - linux/arm
-      - linux/arm64
-
-depends_on:
-- linux-arm64
-- linux-arm
-- linux-amd64
+  - name: publish_arm
+    image: plugins/docker
+    settings:
+      dockerfile: Dockerfile.arm
+      repo: alinbalutoiu/dynamicdns-go
+      tags: linux-arm-${DRONE_BRANCH}
+      username:
+        from_secret: docker_username
+      password:
+        from_secret: docker_password
