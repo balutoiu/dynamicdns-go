@@ -81,6 +81,4 @@ steps:
         - linux/arm64
 
 depends_on:
-  - linux-arm64
-  - linux-arm
-  - linux-amd64
+  - linux-build
