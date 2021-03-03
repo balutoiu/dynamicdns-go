@@ -61,6 +61,8 @@ jobs:
     name: Push manifest with all images
     runs-on: ubuntu-latest
     needs: [docker-build]
+    env:
+      DOCKER_CONFIG: /.docker
     steps:
       - uses: actions/checkout@v2
 
