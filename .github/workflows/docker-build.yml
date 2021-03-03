@@ -55,6 +55,7 @@ jobs:
           context: .
           file: Dockerfile.${{ matrix.GOARCH }}
           push: true
+          platforms: ${{ matrix.GOOS }}/${{ matrix.GOARCH }}
           tags: alinbalutoiu/dynamicdns-go:${{ matrix.GOOS }}-${{ matrix.GOARCH }}
 
   push-images:
@@ -82,4 +83,4 @@ jobs:
           image_name="alinbalutoiu/dynamicdns-go"
           docker manifest create $image_name:${tag} ${image_name}:linux-arm64 ${image_name}:linux-amd64 ${image_name}:linux-arm
 
-          docker manifest push $image_name
+          docker manifest push $image_name:${tag}
