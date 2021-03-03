@@ -12,7 +12,7 @@ jobs:
   # when a job name is not provided
   docker-build:
     # Name the Job
-    name: Lint code base
+    name: Build and push
     # Set the type of machine to run on
     runs-on: ubuntu-latest
 
@@ -55,4 +55,4 @@ jobs:
           context: .
           file: Dockerfile.${{ matrix.GOARCH }}
           push: alinbalutoiu/dynamicdns-go
-          tags: ${{ matrix.GOOS }}-${{ matrix.GOARCH }}-${{ github.head_ref }}
+          tags: ${{ matrix.GOOS }}-${{ matrix.GOARCH }}-ghactions
