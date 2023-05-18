@@ -52,7 +52,6 @@ func runApp(c *cli.Context) error {
 		return err
 	}
 
-	log.Infof("Configuration: %+v", cfg)
 	var client providers.DNSClient
 	switch dnsProvider {
 	case config.GOOGLE_DOMAINS:
