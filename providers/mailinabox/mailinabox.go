@@ -5,7 +5,7 @@ import (
 	"io/ioutil"
 	"net/http"
 
-	"github.com/alinbalutoiu/dynamicdns-go/utils"
+	"github.com/balutoiu/dynamicdns-go/utils"
 
 	log "github.com/sirupsen/logrus"
 )

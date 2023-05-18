@@ -1,10 +1,10 @@
 package googledomains
 
 import (
-	"io/ioutil"
+	"io"
 	"net/http"
 
-	"github.com/alinbalutoiu/dynamicdns-go/utils"
+	"github.com/balutoiu/dynamicdns-go/utils"
 
 	log "github.com/sirupsen/logrus"
 )
@@ -52,7 +52,7 @@ func (gdc *GoogleDomainsClient) UpdateIP() error {
 	}
 	defer resp.Body.Close()
 
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
 
 	if err != nil {
 		return err

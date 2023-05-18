@@ -8,28 +8,19 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/alinbalutoiu/dynamicdns-go/googledomains"
-	"github.com/alinbalutoiu/dynamicdns-go/mailinabox"
-	"github.com/alinbalutoiu/dynamicdns-go/ovhdomains"
+	"github.com/balutoiu/dynamicdns-go/config"
+	"github.com/balutoiu/dynamicdns-go/providers"
+	"github.com/balutoiu/dynamicdns-go/providers/googledomains"
+	"github.com/balutoiu/dynamicdns-go/providers/mailinabox"
+	"github.com/balutoiu/dynamicdns-go/providers/ovhdomains"
 
 	log "github.com/sirupsen/logrus"
 	"github.com/urfave/cli/v2"
 )
 
-const (
-	GOOGLE_DOMAINS = "googledomains"
-	MAIL_IN_A_BOX  = "mailinabox"
-	OVH_DOMAINS    = "ovhdomains"
-)
-
-type DNSClient interface {
-	UpdateIP() error
-}
-
 var (
-	port                  int
+	supportedDnsProviders = []string{config.GOOGLE_DOMAINS, config.MAIL_IN_A_BOX, config.OVH_DOMAINS}
 	logLevel              string
-	supportedDnsProviders = []string{GOOGLE_DOMAINS, MAIL_IN_A_BOX, OVH_DOMAINS}
 	dnsProvider           string
 	configFilePath        string
 	sleepInterval         time.Duration
@@ -51,17 +42,48 @@ func initLog() {
 	log.SetFormatter(formatter)
 }
 
+func runApp(c *cli.Context) error {
+	initLog()
+	log.Infof("Log successfully initialized - %v", logLevel)
+	log.Infof("DNS provider selected: %v", dnsProvider)
+	log.Infof("Config location: %v", configFilePath)
+	cfg, err := config.GetConfig(configFilePath, dnsProvider)
+	if err != nil {
+		return err
+	}
+
+	log.Infof("Configuration: %+v", cfg)
+	var client providers.DNSClient
+	switch dnsProvider {
+	case config.GOOGLE_DOMAINS:
+		client = googledomains.NewClient(cfg.(googledomains.Config))
+	case config.MAIL_IN_A_BOX:
+		client = mailinabox.NewClient(cfg.(mailinabox.Config))
+	case config.OVH_DOMAINS:
+		client = ovhdomains.NewClient(cfg.(ovhdomains.Config))
+	}
+	log.Infof("Client initialized")
+
+	log.Infof("Updating DNS with interval: %v", sleepInterval)
+	for {
+		if err := client.UpdateIP(); err != nil {
+			log.Warnf("Failed to update IP: %v", err)
+		}
+		log.Debugf("Sleeping for %v", sleepInterval)
+		time.Sleep(sleepInterval)
+	}
+}
+
 func main() {
 	app := cli.NewApp()
 	app.Name = "Dynamic DNS Go"
 	app.Usage = "Starts the Dynamic DNS monitoring"
 	app.Authors = []*cli.Author{
-		&cli.Author{
-			Name: "Alin Balutoiu",
+		{
+			Name: "Balutoiu",
 		},
 	}
 	app.Version = "0.1.0"
-
 	app.Flags = []cli.Flag{
 		&cli.StringFlag{
 			Name:        "loglevel",
@@ -74,7 +96,7 @@ func main() {
 			Name: "dns-provider",
 			Usage: fmt.Sprintf("DNS provider (currently supported: %v)",
 				strings.Join(supportedDnsProviders[:], ",")),
-			Value:       GOOGLE_DOMAINS,
+			Value:       config.GOOGLE_DOMAINS,
 			EnvVars:     []string{"DNS_PROVIDER"},
 			Destination: &dnsProvider,
 		},
@@ -109,38 +131,4 @@ func main() {
 	if err := app.Run(os.Args); err != nil {
 		log.Fatal(err)
 	}
-}
-
-func runApp(c *cli.Context) error {
-	initLog()
-	log.Infof("Log successfully initialized - %v", logLevel)
-	log.Infof("DNS provider selected: %v", dnsProvider)
-	log.Infof("Config location: %v", configFilePath)
-	config, err := getConfig(configFilePath, dnsProvider)
-	if err != nil {
-		return err
-	}
-
-	log.Infof("Configuration: %+v", config)
-	var client DNSClient
-	switch dnsProvider {
-	case GOOGLE_DOMAINS:
-		client = googledomains.NewClient(config.(googledomains.Config))
-	case MAIL_IN_A_BOX:
-		client = mailinabox.NewClient(config.(mailinabox.Config))
-	case OVH_DOMAINS:
-		client = ovhdomains.NewClient(config.(ovhdomains.Config))
-	}
-	log.Infof("Client initialized")
-
-	log.Infof("Updating DNS with interval: %v", sleepInterval)
-	for {
-		err = client.UpdateIP()
-		if err != nil {
-			return err
-		}
-		log.Debugf("Sleeping for %v", sleepInterval)
-		time.Sleep(sleepInterval)
-	}
-	return nil
 }

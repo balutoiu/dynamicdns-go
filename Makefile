@@ -4,7 +4,7 @@ export OUT_DIR
 .PHONY: all build
 
 all build:
-	go build -o ${OUT_DIR}/dynamicdns-go
+	CGO_ENABLED=0 go build -o ${OUT_DIR}/dynamicdns-go cmd/dynamicdns-go/main.go
 
 run:
 	@./${OUT_DIR}/dynamicdns-go

@@ -1,0 +1,17 @@
+name: Build DynamicDNS Go
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  container-image:
+    uses: ./.github/workflows/docker-buildx.yaml
+    with:
+      image_name: dynamicdns-go
+      context: .
+      platforms: linux/amd64, linux/arm64, linux/arm/v7

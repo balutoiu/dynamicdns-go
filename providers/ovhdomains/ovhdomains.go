@@ -3,7 +3,7 @@ package ovhdomains
 import (
 	"fmt"
 
-	"github.com/alinbalutoiu/dynamicdns-go/utils"
+	"github.com/balutoiu/dynamicdns-go/utils"
 	"github.com/ovh/go-ovh/ovh"
 )
 

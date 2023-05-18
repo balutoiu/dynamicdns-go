@@ -1,32 +1,38 @@
 # Dynamic DNS Go
 
-[![Build Status](https://cloud.drone.io/api/badges/alinbalutoiu/dynamicdns-go/status.svg)](https://cloud.drone.io/alinbalutoiu/dynamicdns-go)
+[![Build DynamicDNS Go](https://github.com/balutoiu/dynamicdns-go/actions/workflows/build-dynamicdns-go.yaml/badge.svg)](https://github.com/balutoiu/dynamicdns-go/actions/workflows/build-dynamicdns-go.yaml)
 
-A simple Dynamic DNS client written in Go.
+Simple Dynamic DNS client written in Go.
 
 ## How to use
 
 1. Clone the repository.
 
-2. Build the docker container:
-```
-docker build -t alinbalutoiu/dynamicdns-go .
-```
+1. Build the container image:
 
-3. Create the config file ([sample here](/config.yaml)):
-```
-googledomains:
-  username: user
-  password: pass
-  domain: test.example.com
-```
+    ```bash
+    docker build -t balutoiu/dynamicdns-go .
+    ```
 
-4. Run the container:
-```
-docker run -d -v `pwd`/config.yaml:/config.yaml -e DNS_PROVIDER=googledomains alinbalutoiu/dynamicdns-go
-```
+1. Create the config file ([sample here](/testdata/config.yaml)):
 
-Prebuilt docker images are available [here](https://hub.docker.com/r/alinbalutoiu/dynamicdns-go).
+    ```yaml
+    googledomains:
+      username: user
+      password: pass
+      domain: test.example.com
+    ```
+
+1. Run the container:
+
+    ```bash
+    docker run -d \
+        -v ./config.yaml:/config.yaml \
+        -e DNS_PROVIDER=googledomains \
+        balutoiu/dynamicdns-go
+    ```
+
+Prebuilt docker images are available [here](https://github.com/balutoiu/dynamicdns-go/pkgs/container/dynamicdns-go).
 
 ## Environment variables
 
@@ -40,7 +46,8 @@ example: `1s`, `1m`, `1h` etc. (defaults to `1h0m0s`)
 ### Google domains
 
 Example of `config.yaml` file:
-```
+
+```yaml
 googledomains:
   username: user
   password: pass
@@ -48,9 +55,10 @@ googledomains:
 ```
 
 Start the container with:
-```
+
+```bash
 docker run -d --restart=unless-stopped \
-    -v `pwd`/config.yaml:/config.yaml \
+    -v ./config.yaml:/config.yaml \
     -e DNS_PROVIDER=googledomains \
     alinbalutoiu/dynamicdns-go
 ```
@@ -58,7 +66,8 @@ docker run -d --restart=unless-stopped \
 ### Mail-in-a-box
 
 Example of `config.yaml` file:
-```
+
+```yaml
 mailinabox:
   username: user
   password: pass
@@ -67,9 +76,10 @@ mailinabox:
 ```
 
 Start the container with:
-```
+
+```bash
 docker run -d --restart=unless-stopped \
-    -v `pwd`/config.yaml:/config.yaml \
+    -v ./config.yaml:/config.yaml \
     -e DNS_PROVIDER=mailinabox \
     alinbalutoiu/dynamicdns-go
 ```
@@ -77,7 +87,8 @@ docker run -d --restart=unless-stopped \
 ### OVH domains
 
 Example of `config.yaml` file:
-```
+
+```yaml
 ovhdomains:
   application_key: app-key
   application_secret: app-secret
@@ -87,9 +98,10 @@ ovhdomains:
 ```
 
 Start the container with:
-```
+
+```bash
 docker run -d --restart=unless-stopped \
-    -v `pwd`/config.yaml:/config.yaml \
+    -v ./config.yaml:/config.yaml \
     -e DNS_PROVIDER=ovhdomains \
     alinbalutoiu/dynamicdns-go
 ```
