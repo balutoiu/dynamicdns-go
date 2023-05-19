@@ -60,7 +60,7 @@ Start the container with:
 docker run -d --restart=unless-stopped \
     -v ./config.yaml:/config.yaml \
     -e DNS_PROVIDER=googledomains \
-    alinbalutoiu/dynamicdns-go
+    ghcr.io/balutoiu/dynamicdns-go
 ```
 
 ### Mail-in-a-box
@@ -81,7 +81,7 @@ Start the container with:
 docker run -d --restart=unless-stopped \
     -v ./config.yaml:/config.yaml \
     -e DNS_PROVIDER=mailinabox \
-    alinbalutoiu/dynamicdns-go
+    ghcr.io/balutoiu/dynamicdns-go
 ```
 
 ### OVH domains
@@ -103,5 +103,5 @@ Start the container with:
 docker run -d --restart=unless-stopped \
     -v ./config.yaml:/config.yaml \
     -e DNS_PROVIDER=ovhdomains \
-    alinbalutoiu/dynamicdns-go
+    ghcr.io/balutoiu/dynamicdns-go
 ```
