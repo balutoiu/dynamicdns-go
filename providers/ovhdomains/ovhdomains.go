@@ -30,8 +30,11 @@ func NewClient(config Config) *OvhDomainsClient {
 }
 
 func (ovhdc *OvhDomainsClient) UpdateIP() error {
-	ip, err := utils.IPChanged(
-		fmt.Sprintf("%s.%s", ovhdc.config.SubDomain, ovhdc.config.ZoneName))
+	hostname := ovhdc.config.ZoneName
+	if ovhdc.config.SubDomain != "" {
+		hostname = fmt.Sprintf("%s.%s", ovhdc.config.SubDomain, hostname)
+	}
+	ip, err := utils.IPChanged(hostname)
 	if err != nil {
 		return err
 	} else if ip == "" {
@@ -41,9 +44,11 @@ func (ovhdc *OvhDomainsClient) UpdateIP() error {
 
 	var response []int64
 
-	err = ovhdc.client.Get(
-		fmt.Sprintf("/domain/zone/%s/record?fieldType=A&subDomain=%s", ovhdc.config.ZoneName, ovhdc.config.SubDomain),
-		&response)
+	url := fmt.Sprintf("/domain/zone/%s/record?fieldType=A", ovhdc.config.ZoneName)
+	if ovhdc.config.SubDomain != "" {
+		url = fmt.Sprintf("%s&subDomain=%s", url, ovhdc.config.SubDomain)
+	}
+	err = ovhdc.client.Get(url, &response)
 	if err != nil {
 		return err
 	}

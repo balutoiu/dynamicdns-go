@@ -5,5 +5,5 @@ type Config struct {
 	ApplicationSecret string `yaml:"application_secret"`
 	ConsumerKey       string `yaml:"consumer_key"`
 	ZoneName          string `yaml:"zone_name"`
-	SubDomain         string `yaml:"sub_domain"`
+	SubDomain         string `yaml:"sub_domain,omitempty"`
 }

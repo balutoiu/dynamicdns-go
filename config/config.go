@@ -90,9 +90,6 @@ func validateConfig(cfg *Config, dnsProvider string) error {
 		if cfg.OvhDomains.ZoneName == "" {
 			return fmt.Errorf("missing zone_name from configuration")
 		}
-		if cfg.OvhDomains.SubDomain == "" {
-			return fmt.Errorf("missing sub_domain from configuration")
-		}
 	default:
 		return fmt.Errorf("dns provider not supported")
 	}
